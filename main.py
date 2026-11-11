@@ -14,6 +14,35 @@ class Quiz:
         return user_answer == self.answer
 
 
+def create_default_quizzes():
+    return [
+        Quiz(
+            "Python의 창시자는?",
+            ["Guido van Rossum", "Linus Torvalds", "Bjarne Stroustrup", "James Gosling"],
+            1,
+        ),
+        Quiz(
+            "Python에서 화면에 글자를 출력하는 함수는?",
+            ["echo()", "print()", "write()", "show()"],
+            2,
+        ),
+        Quiz(
+            "Python에서 정수를 나타내는 자료형은?",
+            ["str", "bool", "int", "list"],
+            3,
+        ),
+        Quiz(
+            "Python에서 여러 값을 순서대로 담는 자료형은?",
+            ["list", "int", "bool", "float"],
+            1,
+        ),
+        Quiz(
+            "Python에서 함수를 만들 때 사용하는 키워드는?",
+            ["function", "func", "make", "def"],
+            4,
+        ),
+    ]
+
 def show_menu():
     print("=" * 40)
     print("        🎯 나만의 퀴즈 게임 🎯")
