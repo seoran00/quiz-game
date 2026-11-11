@@ -77,6 +77,17 @@ def read_number(prompt, minimum, maximum):
         return number
 
 
+def read_text(prompt):
+    while True:
+        text = input(prompt).strip()
+
+        if text == "":
+            print("⚠️ 입력이 비어 있습니다. 내용을 입력하세요.")
+            continue
+
+        return text
+
+
 def play_quiz(quizzes):
     if len(quizzes) == 0:
         print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
@@ -113,6 +124,26 @@ def play_quiz(quizzes):
     return correct_count
 
 
+def add_quiz(quizzes):
+    print()
+    print("📌 새로운 퀴즈를 추가합니다.")
+    print()
+
+    question = read_text("문제를 입력하세요: ")
+
+    choices = []
+    for number in range(1, 5):
+        choice = read_text(f"선택지 {number}: ")
+        choices.append(choice)
+
+    answer = read_number("정답 번호 (1-4): ", 1, 4)
+
+    quizzes.append(Quiz(question, choices, answer))
+
+    print()
+    print("✅ 퀴즈가 추가되었습니다!")
+
+
 def main():
     quizzes = create_default_quizzes()
 
@@ -123,6 +154,9 @@ def main():
 
             if choice == 1:
                 play_quiz(quizzes)
+                print()
+            elif choice == 2:
+                add_quiz(quizzes)
                 print()
             elif choice == 5:
                 print("👋 프로그램을 종료합니다.")
