@@ -1,0 +1,55 @@
+{
+    "quizzes": [
+        {
+            "question": "Python의 창시자는?",
+            "choices": [
+                "Guido van Rossum",
+                "Linus Torvalds",
+                "Bjarne Stroustrup",
+                "James Gosling"
+            ],
+            "answer": 1
+        },
+        {
+            "question": "Python에서 화면에 글자를 출력하는 함수는?",
+            "choices": [
+                "echo()",
+                "print()",
+                "write()",
+                "show()"
+            ],
+            "answer": 2
+        },
+        {
+            "question": "Python에서 정수를 나타내는 자료형은?",
+            "choices": [
+                "str",
+                "bool",
+                "int",
+                "list"
+            ],
+            "answer": 3
+        },
+        {
+            "question": "Python에서 여러 값을 순서대로 담는 자료형은?",
+            "choices": [
+                "list",
+                "int",
+                "bool",
+                "float"
+            ],
+            "answer": 1
+        },
+        {
+            "question": "Python에서 함수를 만들 때 사용하는 키워드는?",
+            "choices": [
+                "function",
+                "func",
+                "make",
+                "def"
+            ],
+            "answer": 4
+        }
+    ],
+    "best_score": null
+}

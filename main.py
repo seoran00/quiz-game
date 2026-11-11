@@ -1,3 +1,9 @@
+import json
+from pathlib import Path
+
+STATE_FILE = Path(__file__).parent / "state.json"
+
+
 class Quiz:
     def __init__(self, question, choices, answer):
         self.question = question
@@ -12,6 +18,28 @@ class Quiz:
 
     def is_correct(self, user_answer):
         return user_answer == self.answer
+
+    def to_dict(self):
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer,
+        }
+
+    @staticmethod
+    def from_dict(data):
+        question = data["question"]
+        choices = data["choices"]
+        answer = data["answer"]
+
+        if not isinstance(question, str) or question.strip() == "":
+            raise ValueError("문제가 올바르지 않습니다.")
+        if not isinstance(choices, list) or len(choices) != 4:
+            raise ValueError("선택지는 4개여야 합니다.")
+        if not isinstance(answer, int) or answer < 1 or answer > 4:
+            raise ValueError("정답 번호는 1~4여야 합니다.")
+
+        return Quiz(question, choices, answer)
 
 
 def create_default_quizzes():
@@ -78,8 +106,52 @@ def read_text(prompt):
 
 class QuizGame:
     def __init__(self):
-        self.quizzes = create_default_quizzes()
+        self.quizzes = []
         self.best_score = None
+        self.load_state()
+
+    def load_state(self):
+        if not STATE_FILE.exists():
+            self.quizzes = create_default_quizzes()
+            self.best_score = None
+            return
+
+        try:
+            with open(STATE_FILE, "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            self.quizzes = [Quiz.from_dict(item) for item in data["quizzes"]]
+
+            best = data["best_score"]
+            if best is not None:
+                best = {
+                    "score": int(best["score"]),
+                    "correct": int(best["correct"]),
+                    "total": int(best["total"]),
+                }
+            self.best_score = best
+
+            print(
+                f"📂 저장된 데이터를 불러왔습니다. "
+                f"(퀴즈 {len(self.quizzes)}개)"
+            )
+        except (OSError, ValueError, KeyError, TypeError):
+            print("⚠️ 저장 파일을 읽을 수 없어 기본 데이터로 초기화합니다.")
+            self.quizzes = create_default_quizzes()
+            self.best_score = None
+            self.save_state()
+
+    def save_state(self):
+        data = {
+            "quizzes": [quiz.to_dict() for quiz in self.quizzes],
+            "best_score": self.best_score,
+        }
+
+        try:
+            with open(STATE_FILE, "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+        except OSError:
+            print("⚠️ 파일 저장에 실패했습니다.")
 
     def show_menu(self):
         print("=" * 40)
@@ -130,6 +202,7 @@ class QuizGame:
     def update_best_score(self, result):
         if self.best_score is None or result["score"] > self.best_score["score"]:
             self.best_score = result
+            self.save_state()
             print("🎉 새로운 최고 점수입니다!")
 
         print("=" * 40)
@@ -149,6 +222,7 @@ class QuizGame:
         answer = read_number("정답 번호 (1-4): ", 1, 4)
 
         self.quizzes.append(Quiz(question, choices, answer))
+        self.save_state()
 
         print()
         print("✅ 퀴즈가 추가되었습니다!")
@@ -198,11 +272,13 @@ class QuizGame:
                     self.show_best_score()
                     print()
                 elif choice == 5:
+                    self.save_state()
                     print("👋 프로그램을 종료합니다.")
                     break
         except (KeyboardInterrupt, EOFError):
+            self.save_state()
             print()
-            print("👋 입력이 중단되어 안전하게 종료합니다.")
+            print("👋 입력이 중단되어 저장 후 안전하게 종료합니다.")
 
 
 def main():
