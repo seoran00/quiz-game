@@ -43,6 +43,7 @@ def create_default_quizzes():
         ),
     ]
 
+
 def show_menu():
     print("=" * 40)
     print("        🎯 나만의 퀴즈 게임 🎯")
@@ -55,39 +56,80 @@ def show_menu():
     print("=" * 40)
 
 
-def read_menu_choice():
+def read_number(prompt, minimum, maximum):
     while True:
-        text = input("선택: ").strip()
+        text = input(prompt).strip()
 
         if text == "":
-            print("⚠️ 입력이 비어 있습니다. 1-5 사이의 숫자를 입력하세요.")
+            print(f"⚠️ 입력이 비어 있습니다. {minimum}-{maximum} 사이의 숫자를 입력하세요.")
             continue
 
         try:
             number = int(text)
         except ValueError:
-            print("⚠️ 잘못된 입력입니다. 1-5 사이의 숫자를 입력하세요.")
+            print(f"⚠️ 잘못된 입력입니다. {minimum}-{maximum} 사이의 숫자를 입력하세요.")
             continue
 
-        if number < 1 or number > 5:
-            print("⚠️ 잘못된 입력입니다. 1-5 사이의 숫자를 입력하세요.")
+        if number < minimum or number > maximum:
+            print(f"⚠️ 잘못된 입력입니다. {minimum}-{maximum} 사이의 숫자를 입력하세요.")
             continue
 
         return number
 
 
+def play_quiz(quizzes):
+    if len(quizzes) == 0:
+        print("⚠️ 등록된 퀴즈가 없습니다. 먼저 퀴즈를 추가하세요.")
+        return None
+
+    total = len(quizzes)
+    correct_count = 0
+
+    print()
+    print(f"📝 퀴즈를 시작합니다! (총 {total}문제)")
+
+    for number, quiz in enumerate(quizzes, start=1):
+        print()
+        print("-" * 40)
+        print(f"[문제 {number}]")
+        quiz.display()
+        print()
+
+        user_answer = read_number("정답 입력: ", 1, 4)
+
+        if quiz.is_correct(user_answer):
+            print("✅ 정답입니다!")
+            correct_count += 1
+        else:
+            print(f"❌ 오답입니다. 정답은 {quiz.answer}번입니다.")
+
+    score = correct_count * 100 // total
+
+    print()
+    print("=" * 40)
+    print(f"🏆 결과: {total}문제 중 {correct_count}문제 정답! ({score}점)")
+    print("=" * 40)
+
+    return correct_count
+
+
 def main():
+    quizzes = create_default_quizzes()
+
     try:
         while True:
             show_menu()
-            choice = read_menu_choice()
+            choice = read_number("선택: ", 1, 5)
 
-            if choice == 5:
+            if choice == 1:
+                play_quiz(quizzes)
+                print()
+            elif choice == 5:
                 print("👋 프로그램을 종료합니다.")
                 break
-
-            print(f"({choice}번 기능은 아직 준비 중입니다.)")
-            print()
+            else:
+                print(f"({choice}번 기능은 아직 준비 중입니다.)")
+                print()
     except (KeyboardInterrupt, EOFError):
         print()
         print("👋 입력이 중단되어 안전하게 종료합니다.")
