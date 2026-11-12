@@ -17,7 +17,7 @@ Python으로 만든 **터미널(콘솔) 퀴즈 게임**입니다.
 2. 저장소를 내려받습니다.
 
 ```
-git clone https://github.com/내아이디/quiz-game.git
+git clone https://github.com/seoran00/quiz-game.git
 cd quiz-game
 ```
 
