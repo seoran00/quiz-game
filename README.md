@@ -78,3 +78,4 @@ quiz-game/
 | `answer` | 정답 번호 (1~4) |
 | `best_score` | 최고 점수. 아직 풀지 않았으면 `null` |
 | `score` / `correct` / `total` | 점수 / 맞힌 개수 / 전체 문제 수 |
+> clone 실습: 복제본에서 추가한 문장입니다.
