@@ -49,7 +49,21 @@
                 "def"
             ],
             "answer": 4
+        },
+        {
+            "question": "python 파일의 화장자는?",
+            "choices": [
+                ".java",
+                ".py",
+                ".txt",
+                ".exe"
+            ],
+            "answer": 2
         }
     ],
-    "best_score": null
+    "best_score": {
+        "score": 83,
+        "correct": 5,
+        "total": 6
+    }
 }
